@@ -33,7 +33,7 @@ async def generate_response(
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "llama-3.2-3b-preview",
+        "model": "llama3-8b-8192",
         "messages": messages,
         "temperature": 0.4,
         "top_p": 0.9,
@@ -50,7 +50,7 @@ async def generate_response(
 
     except httpx.HTTPStatusError as e:
         logger.error("Groq API error: %s", e.response.text)
-        return "Yaar, Groq server ne error diya hai, ek baar API Key check kar le! 🔧"
+        return f"Groq API Error {e.response.status_code}: Check API key or model. (Hint: {e.response.text[:150]})"
     except httpx.ConnectError:
         logger.error("Cannot connect to Groq API")
         return "Bhai, internet ya connection issue hai. 🔧"
