@@ -211,7 +211,7 @@ export default function App() {
         <FadeIn delay={0.2}>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-tight">
             Meet Your New Best Friend <br />
-            <span className="text-gray-400">Hackathon & Career Guide</span>
+            <span className="text-gray-400">Your ONline AI Dost</span>
           </h1>
         </FadeIn>
 
