@@ -1,11 +1,10 @@
 """
-Ollama LLM client.
+Groq Cloud LLM client.
 
-Wraps the Ollama HTTP API (/api/generate) with:
+Wraps the Groq API (/openai/v1/chat/completions) with:
   - Async HTTP via httpx
   - Timeout handling
   - Error recovery
-  - Streaming support (optional)
 """
 
 from __future__ import annotations
@@ -14,7 +13,7 @@ import httpx
 
 from app.config import settings
 
-logger = logging.getLogger("ai_dost.ollama")
+logger = logging.getLogger("ai_dost.groq")
 
 
 async def generate_response(
@@ -22,57 +21,45 @@ async def generate_response(
     stream: bool = False
 ) -> str:
     """
-    Send messages to Ollama /api/chat and return the response.
+    Send messages to Groq API and return the response.
     """
-    url = f"{settings.ollama_base_url}/api/chat"
+    if not settings.groq_api_key:
+        logger.error("GROQ_API_KEY is not set in environment!")
+        return "Bhai, Groq API key set nahi hai. Render par check kar! 🔧"
+
+    url = "https://api.groq.com/openai/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {settings.groq_api_key}",
+        "Content-Type": "application/json"
+    }
     payload = {
-        "model": settings.ollama_model,
+        "model": "llama-3.2-3b-preview",
         "messages": messages,
-        "stream": stream,
-        "options": {
-            "temperature": 0.4,
-            "top_p": 0.9,
-            "num_predict": 256,
-        },
+        "temperature": 0.4,
+        "top_p": 0.9,
+        "max_tokens": 256,
+        "stream": stream
     }
 
     try:
-        async with httpx.AsyncClient(timeout=settings.ollama_timeout) as client:
-            if not stream:
-                resp = await client.post(url, json=payload)
-                resp.raise_for_status()
-                data = resp.json()
-                return data.get("message", {}).get("content", "").strip()
-            else:
-                chunks: list[str] = []
-                async with client.stream("POST", url, json=payload) as resp:
-                    resp.raise_for_status()
-                    async for line in resp.aiter_lines():
-                        if line:
-                            import json
-                            chunk = json.loads(line)
-                            token = chunk.get("message", {}).get("content", "")
-                            chunks.append(token)
-                            if chunk.get("done"):
-                                break
-                return "".join(chunks).strip()
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(url, headers=headers, json=payload)
+            resp.raise_for_status()
+            data = resp.json()
+            return data["choices"][0]["message"]["content"].strip()
 
     except httpx.HTTPStatusError as e:
-        logger.error("Ollama API error: %s", e.response.text)
-        return "Yaar, Ollama server ne error diya hai, ek baar check kar le! 🔧"
+        logger.error("Groq API error: %s", e.response.text)
+        return "Yaar, Groq server ne error diya hai, ek baar API Key check kar le! 🔧"
     except httpx.ConnectError:
-        logger.error("Cannot connect to Ollama at %s", settings.ollama_base_url)
-        return "Bhai, Ollama se connect nahi ho pa raha. Check kar ki Ollama app open hai? 🔧"
+        logger.error("Cannot connect to Groq API")
+        return "Bhai, internet ya connection issue hai. 🔧"
     except Exception as e:
-        logger.exception("Ollama generation failed: %s", e)
+        logger.exception("Groq generation failed: %s", e)
         return "Yaar, AI soch raha hai bohot zyada... thodi der baad try kar! 🙏"
 
 
 async def check_ollama_health() -> bool:
-    """Ping Ollama to verify it's running."""
-    try:
-        async with httpx.AsyncClient(timeout=5) as client:
-            resp = await client.get(f"{settings.ollama_base_url}/api/tags")
-            return resp.status_code == 200
-    except Exception:
-        return False
+    """Mock health check since we use Groq now."""
+    return True
+

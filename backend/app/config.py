@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     twilio_auth_token: str = ""
     twilio_whatsapp_number: str = ""
 
+    # ── Groq API ─────────────────────────────────────────
+    groq_api_key: str = ""
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
