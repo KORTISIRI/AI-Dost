@@ -185,7 +185,6 @@ export default function App() {
           <a href="#home" className="hover:text-[#00e676] transition-colors">Home</a>
           <a href="#how-it-works" className="hover:text-[#00e676] transition-colors">How it works</a>
           <a href="#features" className="hover:text-[#00e676] transition-colors">Features</a>
-          <a href="#about-us" className="hover:text-[#00e676] transition-colors">About Us</a>
         </div>
         <div className="flex gap-4">
           <button onClick={() => setIsChatOpen(true)} className="px-5 py-2 rounded-full bg-[#00e676] hover:bg-[#2dff7a] text-black transition-transform hover:-translate-y-0.5 shadow-[0_0_20px_rgba(0,230,118,0.3)] text-sm font-semibold">
@@ -322,25 +321,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ABOUT US */}
-      <section id="about-us" className="py-20 px-6 max-w-6xl mx-auto text-center">
-        <FadeIn>
-          <h2 className="text-4xl font-bold mb-8">About Us</h2>
-          <div className="glass-panel p-10 rounded-3xl inline-block max-w-2xl border border-[#00e676]/30 shadow-[0_0_30px_rgba(0,230,118,0.1)]">
-            <p className="text-gray-300 text-lg mb-6">
-              AI Dost is your ultimate companion for hackathons, career prep, and technical interviews. We believe in making high-quality mentorship accessible to everyone, in every language.
-            </p>
-            <a
-              href="https://arthgrowthofficial.netlify.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-2 text-[#00e676] font-bold text-xl tracking-wide hover:text-[#2dff7a] hover:underline transition-all"
-            >
-              Exclusively built by Arthgrowth Studio ↗
-            </a>
-          </div>
-        </FadeIn>
-      </section>
 
       {/* FOOTER */}
       <footer className="py-20 text-center border-t border-white/5 mt-20">
