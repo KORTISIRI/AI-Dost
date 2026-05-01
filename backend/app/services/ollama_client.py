@@ -33,7 +33,7 @@ async def generate_response(
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "llama3-8b-8192",
+        "model": "llama-3.1-8b-instant",
         "messages": messages,
         "temperature": 0.4,
         "top_p": 0.9,
