@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+backend/venv/
+backend/__pycache__/
+backend/.pytest_cache/
+*.pyc
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Build files
+frontend/dist/
+frontend/build/
+dist/
+build/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ChromaDB / Vector Store
+backend/chroma_db/
+chroma_db/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
